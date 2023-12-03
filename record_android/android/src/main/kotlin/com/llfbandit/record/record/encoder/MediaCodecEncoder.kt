@@ -31,9 +31,27 @@ class MediaCodecEncoder(
     }
 
     private fun createCodec(mediaFormat: MediaFormat): MediaCodec {
-        val encoder =
-            MediaCodecList(MediaCodecList.REGULAR_CODECS).findEncoderForFormat(mediaFormat)
-                ?: throw Exception("No encoder found for $mediaFormat")
+        var encoder: String? = null
+
+        val mediaFormatType = mediaFormat.getString(MediaFormat.KEY_MIME);
+        for (codecInfo in MediaCodecList(MediaCodecList.REGULAR_CODECS).codecInfos) {
+            if (!codecInfo.isEncoder) {
+                continue
+            }
+            for (type in codecInfo.supportedTypes) {
+                if (type.equals(mediaFormatType, ignoreCase = true) && codecInfo.name.startsWith("c2")) {
+                    encoder = codecInfo.name
+                    break
+                }
+            }
+            if (!encoder.isNullOrEmpty()) {
+                break
+            }
+        }
+
+        if (encoder.isNullOrEmpty()) {
+            throw Exception("No encoder found for $mediaFormat")
+        }
 
         val codec = MediaCodec.createByCodecName(encoder)
 
