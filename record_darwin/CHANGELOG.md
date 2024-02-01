@@ -1,3 +1,7 @@
+## 1.0.2
+* feat: Add support for iOS 14.5 no interruptions preference
+* change: Stop calling `resume` when incoming call is finished
+
 ## 1.0.1
 * chore: Reworked again implementations to be closer to previous versions:
     - iOS Simulator is now usable again.
