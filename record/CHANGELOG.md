@@ -1,3 +1,8 @@
+## 5.0.5
+
+* (iOS) Add support for iOS 14.5 no interruptions preference
+* (iOS) Stop calling resume when incoming call is finished
+
 ## 5.0.4
 * fix: Regression on creation sequence when disposing `AudioRecorder` without using it.
 
