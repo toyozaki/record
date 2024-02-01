@@ -60,6 +60,14 @@ extension AudioRecordingDelegate {
       throw RecorderError.error(message: "Failed to start recording", details: "setPreferredSampleRate: \(error.localizedDescription)")
     }
     
+    if #available(iOS 14.5, *) {
+      do {
+        try audioSession.setPrefersNoInterruptionsFromSystemAlerts(true)
+      } catch {
+        throw RecorderError.error(message: "Failed to start recording", details: "setPrefersNoInterruptionsFromSystemAlerts: \(error.localizedDescription)")
+      }
+    }
+    
     do {
       try audioSession.setActive(true, options: .notifyOthersOnDeactivation) // Must be done before setting channels and others
     } catch {
