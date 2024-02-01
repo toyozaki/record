@@ -59,7 +59,7 @@ extension AudioRecordingDelegate {
     } catch {
       throw RecorderError.error(message: "Failed to start recording", details: "setPreferredSampleRate: \(error.localizedDescription)")
     }
-    
+
     if #available(iOS 14.5, *) {
       do {
         try audioSession.setPrefersNoInterruptionsFromSystemAlerts(true)
@@ -106,20 +106,22 @@ extension AudioRecordingDelegate {
     
     if type == AVAudioSession.InterruptionType.began {
       pause()
-    } else if type == AVAudioSession.InterruptionType.ended {
-      guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
-      
-      let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
-      
-      if options.contains(.shouldResume) {
-        do {
-          try resume()
-        } catch {
-          stop(completionHandler: {(path) -> () in })
-        }
-      } else {
-        stop(completionHandler: {(path) -> () in })
-      }
     }
+    // The following code occurs internal state corruption.
+    // } else if type == AVAudioSession.InterruptionType.ended {
+    //   guard let optionsValue = userInfo[AVAudioSessionInterruptionOptionKey] as? UInt else { return }
+      
+    //   let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
+      
+    //   if options.contains(.shouldResume) {
+    //     do {
+    //       try resume()
+    //     } catch {
+    //       stop(completionHandler: {(path) -> () in })
+    //     }
+    //   } else {
+    //     stop(completionHandler: {(path) -> () in })
+    //   }
+    // }
   }
 }
